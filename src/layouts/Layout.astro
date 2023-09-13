@@ -1,4 +1,7 @@
 ---
+import Header from "./Header.astro";
+import ThemeScript from "./ThemeScript.astro";
+
 interface Props {
 	title: string;
 }
@@ -10,42 +13,210 @@ const { title } = Astro.props;
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="theme-color" content="#f5f5f5" />
+		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content="Astro description" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
+
+		<ThemeScript />
 		<title>{title}</title>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/themes/light.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/themes/dark.css"
+		/>
+		<script
+			type="module"
+			src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/shoelace-autoloader.js"
+		></script>
 	</head>
 	<body>
+		<Header />
 		<slot />
+
+		<script>
+			import {
+				getThemeSwitcher,
+				handleSwitcherChange,
+				initializeTheme,
+				loadPageCustomElements,
+				whenThemeSwitcherDefined,
+			} from "../utils";
+
+			await loadPageCustomElements();
+
+			await whenThemeSwitcherDefined();
+			const switcher = getThemeSwitcher();
+
+			if (switcher) {
+				initializeTheme();
+				switcher.addEventListener("click", handleSwitcherChange);
+			}
+		</script>
+
+		<style is:global>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			:not(:defined) {
+				visibility: hidden;
+			}
+
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+			}
+
+			:root {
+				font-synthesis: none;
+				color-scheme: light dark;
+				font-family: var(--sl-font-sans);
+				text-rendering: optimizeLegibility;
+				color: var(--sl-color-neutral-900);
+				font-size: var(--sl-font-size-medium);
+				line-height: var(--sl-line-height-dense);
+				background-color: var(--sl-color-neutral-100);
+
+				-webkit-text-size-adjust: 100%;
+				-moz-osx-font-smoothing: grayscale;
+				-webkit-font-smoothing: antialiased;
+
+				--accent: 136, 58, 234;
+				--accent-light: 224, 204, 250;
+				--accent-dark: 49, 10, 101;
+				--accent-gradient: linear-gradient(
+					45deg,
+					rgb(var(--accent)),
+					rgb(var(--accent-light)) 30%,
+					white 60%
+				);
+				--sl-input-required-content-color: var(--sl-color-danger-700);
+			}
+
+			html,
+			body {
+				height: 100%;
+				display: flex;
+			}
+
+			body {
+				opacity: 0;
+				flex: 1 1 100%;
+				align-items: center;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			body.ready {
+				opacity: 1;
+				transition: 0.25s opacity;
+			}
+
+			sl-button::part(base) {
+				transition: all 0.2s ease-in-out;
+			}
+
+			/* FORMS */
+
+			.sh-form {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				justify-content: center;
+				gap: var(--sl-spacing-medium);
+				padding: var(--sl-spacing-x-large);
+				border-radius: var(--sl-border-radius-large);
+				border: 0.2rem solid var(--sl-color-neutral-200);
+			}
+
+			.sh-form-field {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				justify-content: center;
+				gap: var(--sl-spacing-large);
+			}
+
+			.sh-form-field > * {
+				width: 100%;
+			}
+
+			/* user invalid styles */
+
+			.sh-form-field sl-input[data-user-invalid]::part(base),
+			.sh-form-field sl-textarea[data-user-invalid]::part(base),
+			.sh-form-field sl-select[data-user-invalid]::part(combobox),
+			.sh-form-field sl-checkbox[data-user-invalid]::part(control),
+			.sh-form-field sl-radio-group[data-user-invalid] sl-radio::part(control) {
+				border-color: var(--sl-color-danger-600);
+			}
+
+			/* .sh-form-field [data-user-invalid]::part(form-control-label), */
+			.sh-form-field [data-user-invalid]::part(form-control-help-text),
+			.sh-form-field sl-checkbox[data-user-invalid]::part(label) {
+				color: var(--sl-color-danger-700);
+			}
+
+			.sh-form-field sl-checkbox[data-user-invalid]::part(control) {
+				outline: none;
+			}
+
+			.sh-form-field sl-input:focus-within[data-user-invalid]::part(base),
+			.sh-form-field sl-textarea:focus-within[data-user-invalid]::part(base),
+			.sh-form-field sl-select:focus-within[data-user-invalid]::part(combobox),
+			.sh-form-field
+				sl-checkbox:focus-within[data-user-invalid]::part(control) {
+				border-color: var(--sl-color-danger-600);
+				box-shadow: 0 0 0 var(--sl-focus-ring-width) var(--sl-color-danger-300);
+			}
+
+			/* User valid styles */
+
+			.sh-form-field sl-input[data-user-valid]::part(base),
+			.sh-form-field sl-textarea[data-user-valid]::part(base),
+			.sh-form-field sl-select[data-user-valid]::part(combobox),
+			.sh-form-field sl-checkbox[data-user-valid]::part(control),
+			.sh-form-field sl-radio-group[data-user-valid] sl-radio::part(control) {
+				border-color: var(--sl-color-success-600);
+			}
+
+			/* .sh-form-field [data-user-valid]::part(form-control-label), */
+			.sh-form-field [data-user-valid]::part(form-control-help-text),
+			.sh-form-field sl-checkbox[data-user-valid]::part(label) {
+				color: var(--sl-color-success-700);
+			}
+
+			.sh-form-field sl-checkbox[data-user-valid]::part(control) {
+				background-color: var(--sl-color-success-600);
+				outline: none;
+			}
+
+			.sh-form-field sl-input:focus-within[data-user-valid]::part(base),
+			.sh-form-field sl-textarea:focus-within[data-user-valid]::part(base),
+			.sh-form-field sl-select:focus-within[data-user-valid]::part(combobox),
+			.sh-form-field sl-checkbox:focus-within[data-user-valid]::part(control) {
+				border-color: var(--sl-color-success-600);
+				box-shadow: 0 0 0 var(--sl-focus-ring-width) var(--sl-color-success-300);
+			}
+
+			.sh-form:has([data-invalid]) sl-button[type="submit"] {
+				cursor: not-allowed;
+			}
+
+			.sh-form:has([data-invalid]) sl-button[type="submit"]::part(base) {
+				opacity: 0.5;
+				pointer-events: none;
+			}
+		</style>
 	</body>
 </html>
-<style is:global>
-	:root {
-		--accent: 136, 58, 234;
-		--accent-light: 224, 204, 250;
-		--accent-dark: 49, 10, 101;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
-	}
-	html {
-		font-family: system-ui, sans-serif;
-		background: #13151a;
-		background-size: 224px;
-	}
-	code {
-		font-family:
-			Menlo,
-			Monaco,
-			Lucida Console,
-			Liberation Mono,
-			DejaVu Sans Mono,
-			Bitstream Vera Sans Mono,
-			Courier New,
-			monospace;
-	}
-</style>

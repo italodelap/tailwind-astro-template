@@ -1,0 +1,27 @@
+---
+/*
+  This is not a layout but just a component that's used in layouts.
+*/
+---
+
+<script is:inline>
+(function () {
+  if (typeof window !== "undefined") {
+    const userPrefersDarkMode = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+    const htmlTag = document.querySelector("html");
+    const storageTheme = localStorage.getItem("sl-theme");
+
+    if ((!storageTheme && userPrefersDarkMode) || storageTheme === "dark") {
+      htmlTag.classList.add("sl-theme-dark");
+      localStorage.setItem("sl-theme", "dark");
+      document.head.children.namedItem("theme-color").content = "#171717";
+    } else {
+      // we already render light theme
+      localStorage.setItem("sl-theme", "light");
+      document.head.children.namedItem("theme-color").content = "#F5F5F5";
+    }
+  }
+})();
+</script>

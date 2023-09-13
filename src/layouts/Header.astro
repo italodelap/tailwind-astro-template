@@ -1,0 +1,101 @@
+<header>
+  <div>
+    <h1>
+      <span class="text-gradient">Astro</span>&#32;+
+      <span class="text-gradient">Shoelace</span>
+    </h1>
+    <sl-button size="large" variant="default" id="theme-switcher" disabled>
+      <sl-icon name="" label="Cambiar tema" class="theme-switcher__icon"
+      ></sl-icon>
+    </sl-button>
+  </div>
+  <nav>
+    <ul>
+      <li>
+        <a href="/">Home</a>
+      </li>
+      <li>
+        <a href="/about">About</a>
+      </li>
+      <li>
+        <a href="/more-info">More info</a>
+      </li>
+      <li>
+        <a href="/non-existent-page">Non-existent page</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<style>
+  header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    width: -webkit-fill-available;
+    gap: var(--sl-spacing-x-large);
+    padding: var(--sl-spacing-x-large);
+  }
+
+  header > div {
+    display: flex;
+    align-items: center;
+    width: -webkit-fill-available;
+    justify-content: space-between;
+  }
+
+  .text-gradient {
+    background-size: 400%;
+    background-position: 0%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: var(--accent-gradient);
+  }
+
+  nav {
+    width: -webkit-fill-available;
+  }
+
+  nav ul {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    width: -webkit-fill-available;
+    justify-content: space-between;
+  }
+
+  nav ul li {
+    text-decoration: none;
+  }
+
+  ul li a {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: var(--sl-color-neutral-700);
+    font-weight: var(--sl-font-weight-bold);
+    transition: color var(--sl-transition-medium) ease-in-out;
+  }
+
+  ul li a:hover {
+    color: var(--sl-color-neutral-1000);
+  }
+
+  @media only screen and (min-width: 700px) {
+    header {
+      padding: var(--sl-spacing-x-large) 6rem;
+    }
+  }
+
+  @media only screen and (min-width: 850px) {
+    header {
+      padding: var(--sl-spacing-x-large) 20%;
+    }
+  }
+
+  @media only screen and (min-width: 1000px) {
+    header {
+      padding: var(--sl-spacing-x-large) 30%;
+    }
+  }
+</style>
