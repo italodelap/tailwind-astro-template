@@ -7,20 +7,25 @@
 <script is:inline>
 (function () {
   if (typeof window !== "undefined") {
+    const STORAGE_ITEM_NAME = "tw-theme";
+    const TW_LIGHT_THEME = "light";
+    const TW_DARK_THEME = "dark";
+
     const userPrefersDarkMode = window.matchMedia(
       "(prefers-color-scheme: dark)",
     ).matches;
-    const htmlTag = document.querySelector("html");
-    const storageTheme = localStorage.getItem("sl-theme");
 
-    if ((!storageTheme && userPrefersDarkMode) || storageTheme === "dark") {
-      htmlTag.classList.add("sl-theme-dark");
-      localStorage.setItem("sl-theme", "dark");
-      document.head.children.namedItem("theme-color").content = "#171717";
+    const storedTheme = localStorage.getItem(STORAGE_ITEM_NAME);
+    const isDarkThemeSelected = storedTheme === TW_DARK_THEME;
+
+    if ((!storedTheme && userPrefersDarkMode) || isDarkThemeSelected) {
+      localStorage.setItem(STORAGE_ITEM_NAME, TW_DARK_THEME);
+      document.querySelector("html").classList.add(TW_DARK_THEME);
+      document.head.children.namedItem("theme-color").content = "#262626";
     } else {
       // we already render light theme
-      localStorage.setItem("sl-theme", "light");
-      document.head.children.namedItem("theme-color").content = "#F5F5F5";
+      localStorage.setItem(STORAGE_ITEM_NAME, TW_LIGHT_THEME);
+      document.head.children.namedItem("theme-color").content = "#e5e5e5";
     }
   }
 })();
